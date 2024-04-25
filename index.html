@@ -3,97 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Online Fashion Store</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
-      color: #333;
-      margin: 0;
-      padding: 0;
     }
-
-    header {
-      background-color: #333;
-      color: #fff;
-      padding: 10px;
-      text-align: center;
-    }
-
     .product {
       border: 1px solid #ccc;
       padding: 10px;
       margin: 10px;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 200px;
+      float: left;
     }
-
-    .search-box {
-      margin: 10px;
+    .product img {
+      max-width: 100%;
+      height: auto;
     }
-
-    #product-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+    .search {
+      margin-top: 20px;
     }
   </style>
+  <title>Online Fashion Store</title>
 </head>
 <body>
-  <header>
-    <h1>Online Fashion Store</h1>
-  </header>
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search products...">
-    <button onclick="searchProducts()">Search</button>
+  <div class="icon">
+    <img src="icon.png" alt="Online Fashion Store">
   </div>
-  <div id="product-container">
-    <!-- Products will be dynamically added here using JavaScript -->
+  <div class="search">
+    <input type="text" id="searchInput" placeholder="Search...">
+    <button onclick="search()">Search</button>
+  </div>
+  <div id="products">
+    <!-- Product display will be dynamically added here using JavaScript -->
+  </div>
+  <div id="cart">
+    <h2>Cart</h2>
+    <ul id="cartItems"></ul>
+    <button onclick="calculateTotal()">Calculate Total</button>
+    <div id="totalPrice"></div>
+    <button onclick="checkout()">Checkout</button>
   </div>
 
   <script>
     const products = [
-      { name: 'Product 1', image: 'product1.jpg' },
-      { name: 'Product 2', image: 'product2.jpg' },
-      // Add more products with images
+      { name: "Product 1", image: "product1.jpg", price: 50 },
+      { name: "Product 2", image: "product2.jpg", price: 60 },
+      { name: "Product 3", image: "product3.jpg", price: 35 },
+      { name: "Product 4", image: "product4.jpg", price: 65 },
+      { name: "Product 5", image: "product5.jpg", price: 55 },
+      { name: "Product 6", image: "product6.jpg", price: 43 },
+      { name: "Product 7", image: "product7.jpg", price: 85 },
+      { name: "Product 8", image: "product8.jpg", price: 70 },
+     
+     
+
+      // Add more products here
     ];
 
-    function displayProducts() {
-      const container = document.getElementById('product-container');
-      container.innerHTML = '';
-      products.forEach(product => {
-        const productDiv = document.createElement('div');
-        productDiv.classList.add('product');
-        productDiv.innerHTML = `
-          <h3>${product.name}</h3>
-          <img src="${product.image}" alt="${product.name}">
-        `;
-        container.appendChild(productDiv);
+    // Display products
+    const productsDiv = document.getElementById("products");
+    products.forEach(product => {
+      const productDiv = document.createElement("div");
+      productDiv.classList.add("product");
+      productDiv.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p>$${product.price}</p>
+        <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+      `;
+      productsDiv.appendChild(productDiv);
+    });
+
+    // Add to cart
+    let cart = [];
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCartDisplay();
+    }
+
+    // Update cart display
+    function updateCartDisplay() {
+      const cartItems = document.getElementById("cartItems");
+      cartItems.innerHTML = "";
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} - $${item.price}`;
+        cartItems.appendChild(li);
       });
     }
 
-    function searchProducts() {
-      const searchInput = document.getElementById('searchInput').value.toLowerCase();
-      const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchInput));
-      if (searchInput === '') {
-        displayProducts();
-      } else {
-        const container = document.getElementById('product-container');
-        container.innerHTML = '';
-        filteredProducts.forEach(product => {
-          const productDiv = document.createElement('div');
-          productDiv.classList.add('product');
-          productDiv.innerHTML = `
-            <h3>${product.name}</h3>
-            <img src="${product.image}" alt="${product.name}">
-          `;
-          container.appendChild(productDiv);
-        });
-      }
+    // Calculate total
+    function calculateTotal() {
+      const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+      const totalDiv = document.getElementById("totalPrice");
+      totalDiv.textContent = `Total: $${totalPrice}`;
     }
 
-    // Initial display of products
-    displayProducts();
+    // Checkout
+    function checkout() {
+      alert("Thank you for shopping with us!");
+      cart = [];
+      updateCartDisplay();
+      calculateTotal();
+    }
+
+    // Search functionality
+    function search() {
+      const searchInput = document.getElementById("searchInput");
+      const searchTerm = searchInput.value.toLowerCase();
+      const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm)
+      );
+      productsDiv.innerHTML = "";
+      filteredProducts.forEach(product => {
+        const productDiv = document.createElement("div");
+        productDiv.classList.add("product");
+        productDiv.innerHTML = `
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>$${product.price}</p>
+          <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+        `;
+        productsDiv.appendChild(productDiv);
+      });
+    }
   </script>
 </body>
 </html>
