@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Fashion Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .product {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-box {
+      margin: 10px;
+    }
+
+    #product-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Online Fashion Store</h1>
+  </header>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search products...">
+    <button onclick="searchProducts()">Search</button>
+  </div>
+  <div id="product-container">
+    <!-- Products will be dynamically added here using JavaScript -->
+  </div>
+
+  <script>
+    const products = [
+      { name: 'Product 1', image: 'product1.jpg' },
+      { name: 'Product 2', image: 'product2.jpg' },
+      // Add more products with images
+    ];
+
+    function displayProducts() {
+      const container = document.getElementById('product-container');
+      container.innerHTML = '';
+      products.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product');
+        productDiv.innerHTML = `
+          <h3>${product.name}</h3>
+          <img src="${product.image}" alt="${product.name}">
+        `;
+        container.appendChild(productDiv);
+      });
+    }
+
+    function searchProducts() {
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchInput));
+      if (searchInput === '') {
+        displayProducts();
+      } else {
+        const container = document.getElementById('product-container');
+        container.innerHTML = '';
+        filteredProducts.forEach(product => {
+          const productDiv = document.createElement('div');
+          productDiv.classList.add('product');
+          productDiv.innerHTML = `
+            <h3>${product.name}</h3>
+            <img src="${product.image}" alt="${product.name}">
+          `;
+          container.appendChild(productDiv);
+        });
+      }
+    }
+
+    // Initial display of products
+    displayProducts();
+  </script>
+</body>
+</html>
